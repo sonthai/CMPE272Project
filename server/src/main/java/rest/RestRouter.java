@@ -7,7 +7,7 @@ import services.HelloWorldService;
 public class RestRouter extends RouteBuilder {
     public void configure() throws Exception {
         restConfiguration().component("restlet")
-                .host("127.0.0.1")
+                //.host("127.0.0.1")
                 .port(8080)
                 .bindingMode(RestBindingMode.auto);
 
