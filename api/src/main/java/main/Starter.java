@@ -1,5 +1,6 @@
-package camel.rest;
+package main;
 
+import camel.rest.routes.TwitterRouterBuilder;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 

@@ -117,7 +117,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>camel.rest.Starter</mainClass>
+                    <mainClass>main.Starter</mainClass>
                 </configuration>
             </plugin>
         </plugins>

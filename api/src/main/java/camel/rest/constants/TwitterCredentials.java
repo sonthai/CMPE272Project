@@ -1,4 +1,4 @@
-package camel.rest;
+package camel.rest.constants;
 
 public class TwitterCredentials {
     public static String consumerKey = "CZPa7rNbtr3Wh2SanXkJCzbFM";
