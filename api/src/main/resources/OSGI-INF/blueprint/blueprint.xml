@@ -9,8 +9,11 @@
   http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
   http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
   ">
-    <bean id="restRouter" class="rest.RestRouter"></bean>
+    <bean id="routeBuilder" class="camel.rest.TwitterRouterBuilder">
+    </bean>
+
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
-        <routeBuilder ref="restRouter" />
+        <routeBuilder ref="routeBuilder" />
     </camelContext>
+
 </blueprint>
