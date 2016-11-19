@@ -1,4 +1,0 @@
-camel\rest\services\TwitterService.class
-camel\rest\constants\TwitterCredentials.class
-main\Starter.class
-camel\rest\routes\TwitterRouterBuilder.class

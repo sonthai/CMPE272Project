@@ -2,7 +2,6 @@ package camel.rest.dao;
 
 
 import camel.rest.model.User;
-import org.apache.camel.language.Bean;
 
 
 public class UserDao {

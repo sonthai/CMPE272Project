@@ -6,15 +6,13 @@ import org.apache.camel.BeanInject;
 import org.apache.camel.Exchange;
 
 public class UserServices {
-    @BeanInject
-    UserDao userDao;
     public void login(Exchange exchange) {
-        User user = userDao.getUserInfo();
+       // User user = userDao.getUserInfo();
         //String bodyMessage = "Hello, world";
-        /*User user = new User();
+        User user = new User();
         user.setUserName("sdthai");
         user.setEmail("son.ccsf@gmail.com");
-        user.setPassword("1234545");*/
+        user.setPassword("1234545");
 
         exchange.getIn().setBody(user);
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
