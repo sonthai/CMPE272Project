@@ -11,10 +11,21 @@
   ">
     <bean id="routeBuilder" class="camel.rest.routes.RestRouteBuilder">
     </bean>
+   <!-- <bean id="userdao" class="camel.rest.dao.UserDao"/>-->
 
 
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
         <routeBuilder ref="routeBuilder" />
     </camelContext>
+
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/mkyongjava" />
+        <property name="username" value="root" />
+        <property name="password" value="password" />
+    </bean>
+
+
 
 </blueprint>
