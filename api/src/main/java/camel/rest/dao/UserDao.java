@@ -1,11 +1,13 @@
 package camel.rest.dao;
 
 
-import camel.rest.model.User;
+import camel.rest.domain.ResponseMessage;
+
+import java.util.LinkedHashMap;
 
 
 public interface UserDao {
-    public User findUser(String userName);
+    public ResponseMessage findUser(LinkedHashMap<String, Object> userData, boolean checkUserExists);
 
-    public void register(User user);
+    public ResponseMessage register(LinkedHashMap<String, Object> userData);
 }

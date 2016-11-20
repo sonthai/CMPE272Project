@@ -9,11 +9,11 @@ public class RestRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
         restConfiguration().component("restlet")
                 .host("localhost")
-                .port(4000)
+                .port(8181)
                 .bindingMode(RestBindingMode.json);
 
         rest("/api")
-                .get("/login").produces("application/json").to("direct:user_login")
+                .post("/login").consumes("application/json").produces("application/json").to("direct:user_login")
                 .post("/register").produces("application/json").to("direct:user_register");
 
         from("direct:user_login").bean(UserServices.class, "login").end();

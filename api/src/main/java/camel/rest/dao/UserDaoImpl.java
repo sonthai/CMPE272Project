@@ -1,64 +1,89 @@
 package camel.rest.dao;
 
-import camel.rest.database.DatabaseConnection;
-import camel.rest.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import camel.rest.database.QueryObject;
+import camel.rest.database.UserObject;
+import camel.rest.domain.ResponseMessage;
+import camel.rest.utils.Constants;
+import camel.rest.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class UserDaoImpl implements UserDao {
-    //@Autowired
-    //private DataSource myDataSource;
+    Logger LOG = LoggerFactory.getLogger(UserDaoImpl.class);
 
     @Override
-    public User findUser(String userName) {
-        /*User user = new User();
-        user.setUserName("sdthai");
-        user.setEmail("son.ccsf@gmail.com");
-        user.setPassword("1234545");*/
-        //DatabaseConnection DBconn = new DatabaseConnection();
-        DataSource dataSource = DatabaseConnection.getDataSource();
+    public ResponseMessage findUser(LinkedHashMap<String, Object> userData, boolean checkUserExist) {
+        ResponseMessage response = null;
+        if (checkUserExist) {
+            LinkedHashMap<String, Object> tmp = new LinkedHashMap<>();
+            tmp.put("user_name", userData.get("user_name"));
+            userData = tmp;
+        } else {
+            userData.put("user_password", encryptWithMD5((String) userData.get("user_password")));
+        }
 
-        String sql = "SELECT * FROM testUser";
-        Connection conn = null;
-        User user = null;
+        QueryObject queryObject = new UserObject();
+        queryObject.setOperation("SELECT");
+        queryObject.setQueryFields(new String[] {"*"});
+        queryObject.setTable("user");
+        String whereClause = Utils.flattenKeyValuePair(userData, "AND");
+        queryObject.setWhereClause(whereClause);
 
-        try {
-            conn = dataSource.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+        queryObject.executeQuery();
 
-            if (rs.next()) {
-                user = new User();
-                user.setUserName(rs.getString("userName"));
-                user.setEmail(rs.getString("Email"));
-            }
+        List<Map<String, Object>> rows = queryObject.getRecords();
 
-            rs.close();
-            ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {}
+        if (rows.size() == 0 && !checkUserExist) {
+            response = Utils.constructMsg(1, Constants.FAIL_LOGIN, null);
+        } else if (rows.size() > 0){
+            if (!checkUserExist) {
+                response = Utils.constructMsg(0, Constants.SUCCESS_LOGIN, null);
+            } else {
+                response = Utils.constructMsg(1, Constants.FAIL_REGISTER, null);
             }
         }
 
-        return user;
+        return response;
     }
 
     @Override
-    public void register(User user) {
+    public ResponseMessage register(LinkedHashMap<String, Object> userData) {
+        ResponseMessage response = findUser(userData, true);
+        if (response == null) {
+            userData.put("user_password", encryptWithMD5((String) userData.get("user_password")));
+            QueryObject queryObject = new UserObject();
+            queryObject.setOperation("INSERT");
+            queryObject.setTable("user");
+            List<String> insertValues = Utils.flattenMap(userData);
+            queryObject.setValues(insertValues);
+            queryObject.executeQuery();
+            response = Utils.constructMsg(0, Constants.SUCCESS_REGISTER, null);
+        }
 
+        return  response;
     }
 
-    //public void setDataSource(DataSource dataSource) {
-        //this.dataSource = dataSource;
-    //}
+    private String encryptWithMD5(String pass) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] passBytes = pass.getBytes();
+            md.reset();
+            byte[] digested = md.digest(passBytes);
+            StringBuffer sb = new StringBuffer();
+            for(int i=0;i<digested.length;i++){
+                sb.append(Integer.toHexString(0xff & digested[i]));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            LOG.error("Failed to encrypt password");
+        }
+        return null;
+    }
 }

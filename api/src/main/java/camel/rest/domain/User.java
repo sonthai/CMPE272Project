@@ -1,17 +1,19 @@
-package camel.rest.model;
+package camel.rest.domain;
 
 
 public class User {
-    private String userName;
+    private int user_id;
+    private String user_name;
     private String email;
     private String password;
 
+
     public String getUserName() {
-        return userName;
+        return user_name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String user_name) {
+        this.user_name = user_name;
     }
 
     public String getEmail() {
@@ -28,5 +30,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getUserId() {
+        return user_id;
+    }
+
+    public void setUserId(int user_id) {
+        this.user_id = user_id;
     }
 }

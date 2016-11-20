@@ -1,22 +1,31 @@
 package camel.rest.services;
 
-import camel.rest.dao.UserDao;
 import camel.rest.dao.UserDaoImpl;
-import camel.rest.model.User;
-import org.apache.camel.BeanInject;
+import camel.rest.domain.ResponseMessage;
 import org.apache.camel.Exchange;
+
+import java.util.LinkedHashMap;
 
 public class UserServices {
     UserDaoImpl userdao;
 
     public void login(Exchange exchange) {
         userdao = new UserDaoImpl();
-        User user = userdao.findUser("");
-        exchange.getIn().setBody(user);
+        LinkedHashMap<String, Object> userData = (LinkedHashMap) exchange.getIn().getBody();
+
+        ResponseMessage msg = userdao.findUser(userData, false);
+        exchange.getIn().setBody(msg);
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, "200");
     }
 
     public void register(Exchange exchange) {
+        userdao = new UserDaoImpl();
+        LinkedHashMap<String, Object> userData = (LinkedHashMap) exchange.getIn().getBody();
+        ResponseMessage msg = userdao.register(userData);
+        exchange.getIn().setBody(msg);
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, "200");
+
     }
 }
