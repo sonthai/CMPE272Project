@@ -10,7 +10,7 @@
     <packaging>bundle</packaging>
 
     <properties>
-        <camel.version>2.17.3</camel.version>
+        <camel.version>LATEST</camel.version>
         <log4j-version>1.2.16</log4j-version>
         <slf4j-version>1.7.3</slf4j-version>
     </properties>
@@ -47,34 +47,19 @@
             <version>${camel.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-            <version>2.17.3</version>
-        </dependency>
-        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>6.0.4</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>4.3.3.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>4.3.3.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>4.3.3.RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
             <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.4.2</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -117,9 +102,9 @@
             <version>4.4.5</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-            <version>2.16.2</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
         </dependency>
     </dependencies>
     <build>
@@ -142,6 +127,9 @@
                 <configuration>
                     <instructions>
                         <_include>-bnd.bnd</_include>
+                        <Import-Package>*,com.mysql.cj.jdbc;version="6.0.4"</Import-Package>
+                        <Export-Package>org.apache.commons.dbcp2, org.apache.commons.lang3*
+                        </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
