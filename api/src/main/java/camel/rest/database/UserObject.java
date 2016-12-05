@@ -15,8 +15,8 @@ public class UserObject extends QueryObject {
         try {
             while (rs.next()) {
                 map = new HashMap<>();
-                map.put("user_name", rs.getString("user_name"));
-                map.put("user_id", rs.getInt("user_id"));
+                map.put("userName", rs.getString("userName"));
+                map.put("id", rs.getInt("id"));
                 userList.add(map);
             }
         } catch (Exception e) {}

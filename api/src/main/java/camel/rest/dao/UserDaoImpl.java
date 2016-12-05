@@ -23,10 +23,10 @@ public class UserDaoImpl implements UserDao {
         ResponseMessage response = null;
         if (checkUserExist) {
             LinkedHashMap<String, Object> tmp = new LinkedHashMap<>();
-            tmp.put("user_name", userData.get("user_name"));
+            tmp.put("userName", userData.get("userName"));
             userData = tmp;
         } else {
-            userData.put("user_password", encryptWithMD5((String) userData.get("user_password")));
+            userData.put("password", encryptWithMD5((String) userData.get("password")));
         }
 
         QueryObject queryObject = new UserObject();
@@ -57,7 +57,7 @@ public class UserDaoImpl implements UserDao {
     public ResponseMessage register(LinkedHashMap<String, Object> userData) {
         ResponseMessage response = findUser(userData, true);
         if (response == null) {
-            userData.put("user_password", encryptWithMD5((String) userData.get("user_password")));
+            userData.put("password", encryptWithMD5((String) userData.get("password")));
             QueryObject queryObject = new UserObject();
             queryObject.setOperation("INSERT");
             queryObject.setTable("user");
