@@ -3,7 +3,13 @@ package camel.rest.utils;
 import camel.rest.domain.ResponseMessage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,4 +83,27 @@ public class Utils {
 
         return sb.toString();
     }
+    public String doGet(String urlString) {
+        try {
+            //OAuthConsumer consumer = new CommonsHttpOAuthConsumer(TwitterCredentials.consumerKey, TwitterCredentials.consumerSecret);
+            //consumer.setTokenWithSecret(TwitterCredentials.accessToken, TwitterCredentials.accessTokenSecret);
+            CloseableHttpClient client = HttpClientBuilder.create().build();
+            HttpGet request = new HttpGet(urlString);
+            //consumer.sign(request);
+
+            HttpResponse response = client.execute(request);
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while((line = rd.readLine())!= null) {
+                sb.append(line);
+            }
+            rd.close();
+            return sb.toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+
 }

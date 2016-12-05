@@ -44,10 +44,6 @@ public class UserDaoImpl implements UserDao {
             response = Utils.constructMsg(1, Constants.FAIL_LOGIN, null);
         } else if (rows.size() > 0){
             if (!checkUserExist) {
-                //List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
-                //Map<String, Object> map = new LinkedHashMap<>();
-                //map.put("role", rows.get(0).get("role"));
-                //resultList.add(map);
                 response = Utils.constructMsg(0, Constants.SUCCESS_LOGIN, rows);
             } else {
                 response = Utils.constructMsg(1, Constants.FAIL_REGISTER, null);
