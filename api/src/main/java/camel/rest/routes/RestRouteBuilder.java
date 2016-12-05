@@ -16,11 +16,17 @@ public class RestRouteBuilder extends RouteBuilder {
         rest("/api")
                 .post("/login").consumes("application/json").produces("application/json").to("direct:user_login")
                 .post("/register").produces("application/json").to("direct:user_register")
-                .post("/job/list").produces("application/json").to("direct:job_list");
+                .post("/job/list").produces("application/json").to("direct:job_list")
+                .post("/job/apply").produces("application/json").to("direct:job_apply")
+                .post("/job/history").produces("application/json").to("direct:job_history")
+                .post("/job/create").produces("application/json").to("direct:job_create");
 
         from("direct:user_login").bean(UserServices.class, "login").end();
         from("direct:user_register").bean(UserServices.class, "register").end();
         from("direct:job_list").bean(JobServices.class, "findJobs").end();
+        from("direct:job_apply").bean(JobServices.class, "applyJob").end();
+        from("direct:job_history").bean(JobServices.class, "applyHistory").end();
+        from("direct:job_create").bean(JobServices.class, "createJob").end();
 
     }
 }
