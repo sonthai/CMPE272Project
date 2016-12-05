@@ -6,4 +6,6 @@ public class Constants {
     public static final String SUCCESS_LOGIN = "Log in successfully.";
     public static final String FAIL_REGISTER = "User already exists.";
     public static final String SUCCESS_REGISTER = "Register successfully";
+
+    public static final String diceURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json";
 }

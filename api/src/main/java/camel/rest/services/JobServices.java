@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 public class JobServices {
     JobDaoImpl jobDao;
 
-    public void getJobs(Exchange exchange) {
+    public void findJobs(Exchange exchange) {
         jobDao = new JobDaoImpl();
         LinkedHashMap<String, Object> jobData = (LinkedHashMap) exchange.getIn().getBody();
 

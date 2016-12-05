@@ -16,7 +16,7 @@ public class RestRouteBuilder extends RouteBuilder {
         rest("/api")
                 .post("/login").consumes("application/json").produces("application/json").to("direct:user_login")
                 .post("/register").produces("application/json").to("direct:user_register")
-                .get("/job/list").produces("application/json").to("direct:job_list");
+                .post("/job/list").produces("application/json").to("direct:job_list");
 
         from("direct:user_login").bean(UserServices.class, "login").end();
         from("direct:user_register").bean(UserServices.class, "register").end();

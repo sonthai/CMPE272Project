@@ -9,6 +9,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +17,25 @@ import java.util.Map;
 
 
 public class Utils {
-    public static JsonNode convertJsonNode(String s) {
+    public static List<Map<String, Object>> parseJobJsonString(String jsonString) {
+        List<Map<String, Object>> jobs = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = null;
-        try {
-            jsonNode = objectMapper.readTree(s);
-        } catch (Exception e) {}
+        JsonNode root = null;
 
-        return jsonNode;
+        try {
+            root = objectMapper.readTree(jsonString);
+            JsonNode itemListNode = root.path("resultItemList");
+            if (itemListNode.isArray()) {
+                for (JsonNode node: itemListNode) {
+                    Map<String, Object> job = objectMapper.treeToValue(node, Map.class);
+                    jobs.add(job);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return jobs;
     }
 
     public static ResponseMessage constructMsg(int errorCode, String message, List<Map<String, Object>> data) {
@@ -70,7 +82,6 @@ public class Utils {
             if (sb.length() > 0) {
                 sb.append(" ").append(delim).append(" ");
             }
-
             sb.append(pair.getKey()).append("=");
 
             if (pair.getValue() instanceof String) {
@@ -78,12 +89,12 @@ public class Utils {
             } else if (pair.getValue() instanceof Integer || pair.getValue() instanceof Double) {
                 sb.append(pair.getValue());
             }
-
         }
 
         return sb.toString();
     }
-    public String doGet(String urlString) {
+
+    public static String doGet(String urlString) {
         try {
             //OAuthConsumer consumer = new CommonsHttpOAuthConsumer(TwitterCredentials.consumerKey, TwitterCredentials.consumerSecret);
             //consumer.setTokenWithSecret(TwitterCredentials.accessToken, TwitterCredentials.accessTokenSecret);
