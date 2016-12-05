@@ -23,10 +23,10 @@ public class RestRouteBuilder extends RouteBuilder {
 
         from("direct:user_login").bean(UserServices.class, "login").end();
         from("direct:user_register").bean(UserServices.class, "register").end();
-        from("direct:job_list").bean(JobServices.class, "findJobs").end();
-        from("direct:job_apply").bean(JobServices.class, "applyJob").end();
-        from("direct:job_history").bean(JobServices.class, "applyHistory").end();
-        from("direct:job_create").bean(JobServices.class, "createJob").end();
+        //from("direct:job_list").bean(JobServices.class, "findJobs").end();
+        //from("direct:job_apply").bean(JobServices.class, "applyJob").end();
+        //from("direct:job_history").bean(JobServices.class, "applyHistory").end();
+        //from("direct:job_create").bean(JobServices.class, "createJob").end();
 
     }
 }
