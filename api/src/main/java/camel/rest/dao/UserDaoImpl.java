@@ -159,11 +159,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public ResponseMessage getProfile(LinkedHashMap<String, Object> userData) {
         ResponseMessage response = null;
-        String isNewUser = "false";
-        if (userData.get("isNewUser") != null) {
-            isNewUser = (String) userData.get("isNewUser");
-            userData.remove("isNewUser");
-        }
+        //String isNewUser = "false";
+        //if (userData.get("isNewUser") != null) {
+          //  isNewUser = (String) userData.get("isNewUser");
+            //userData.remove("isNewUser");
+        //}
         /*Map<String, Object> userDB = new LinkedHashMap<>();
         if (isNewUser.equals("true")) {
             userDB = userData;
@@ -186,16 +186,20 @@ public class UserDaoImpl implements UserDao {
 
         List<Map<String, Object>> rows = userObject.getRecords();
 
-        if (isNewUser.equals("false")) {
-            QueryObject queryObject = new UserProfileObject();
-            queryObject.setOperation("SELECT");
-            queryObject.setQueryFields(new String[]{"*"});
-            queryObject.setTable("user_profile");
-            whereClause = Utils.flattenKeyValuePair(userData, "AND");
-            queryObject.setWhereClause(whereClause);
+        QueryObject queryObject = new UserProfileObject();
+        queryObject.setOperation("SELECT");
+        queryObject.setQueryFields(new String[]{"*"});
+        queryObject.setTable("user_profile");
+        whereClause = Utils.flattenKeyValuePair(userData, "AND");
+        queryObject.setWhereClause(whereClause);
 
-            queryObject.executeQuery();
-            rows.get(0).putAll(queryObject.getRecords().get(0));
+        queryObject.executeQuery();
+        List<Map<String, Object>> profileRow = queryObject.getRecords();
+        if (profileRow.size() > 0) {
+            rows.get(0).putAll(profileRow.get(0));
+            rows.get(0).put("isNewUser", 0);
+        } else {
+            rows.get(0).put("isNewUser", 1);
         }
 
         response = Utils.constructMsg(0, "", rows);
