@@ -10,4 +10,6 @@ public interface UserDao {
     public ResponseMessage findUser(LinkedHashMap<String, Object> userData, boolean checkUserExists);
 
     public ResponseMessage register(LinkedHashMap<String, Object> userData);
+    public ResponseMessage updateProfile(LinkedHashMap<String, Object> userData);
+    public ResponseMessage getProfile(LinkedHashMap<String, Object> userData);
 }

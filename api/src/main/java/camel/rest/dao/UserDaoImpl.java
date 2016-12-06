@@ -70,6 +70,47 @@ public class UserDaoImpl implements UserDao {
         return  response;
     }
 
+    @Override
+    public ResponseMessage updateProfile(LinkedHashMap<String, Object> userData) {
+        ResponseMessage response = null;
+        QueryObject queryObject = new UserObject();
+        queryObject.setOperation("INSERT");
+        queryObject.setTable("user_profile");
+        List<String> insertValues = Utils.flattenMap(userData);
+        queryObject.setValues(insertValues);
+        queryObject.executeQuery();
+        response = Utils.constructMsg(0, Constants.SUCCESS_UPDATE_PROFILE, null);
+
+        return response;
+    }
+
+    @Override
+    public ResponseMessage getProfile(LinkedHashMap<String, Object> userData) {
+        boolean isNewUser =  (boolean) userData.get("isNewUser");
+
+        QueryObject queryObject = new UserObject();
+        queryObject.setOperation("SELECT");
+        queryObject.setQueryFields(new String[] {"*"});
+        queryObject.setTable("user");
+        String whereClause = Utils.flattenKeyValuePair(userData, "AND");
+        queryObject.setWhereClause(whereClause);
+
+        queryObject.executeQuery();
+
+        if (!isNewUser) {
+            queryObject = new UserObject();
+            queryObject.setOperation("SELECT");
+            queryObject.setQueryFields(new String[]{"*"});
+            queryObject.setTable("user_profile");
+            whereClause = Utils.flattenKeyValuePair(userData, "AND");
+            queryObject.setWhereClause(whereClause);
+
+            queryObject.executeQuery();
+        }
+
+        return null;
+    }
+
     private String encryptWithMD5(String pass) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
