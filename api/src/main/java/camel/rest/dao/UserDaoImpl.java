@@ -77,6 +77,7 @@ public class UserDaoImpl implements UserDao {
         String isEdit = "false";
         if (userData.get("isEdit") != null) {
             isEdit = (String) userData.get("isEdit");
+            userData.remove("isEdit");
         }
 
         // Update user table if its edited only for phone number and password
@@ -111,6 +112,7 @@ public class UserDaoImpl implements UserDao {
         String isNewUser = "false";
         if (userData.get("isNewUser") != null) {
             isNewUser = (String) userData.get("isNewUser");
+            userData.remove("isNewUser");
         }
         /*Map<String, Object> userDB = new LinkedHashMap<>();
         if (isNewUser.equals("true")) {
