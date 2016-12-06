@@ -79,7 +79,7 @@ public class QueryObject {
             sb.append("INTO ").append(table).append(" ");
             sb.append(values.get(0) + " VALUES " + values.get(1));
         } else if (operation.equalsIgnoreCase("update")) {
-            sb.append("TABLE ").append(table);
+            sb.append(table);
             sb.append(" SET ");
             sb.append(values.get(0));
             if (whereClause.length() > 0) {
