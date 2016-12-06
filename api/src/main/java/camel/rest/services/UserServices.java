@@ -29,6 +29,16 @@ public class UserServices {
 
     }
 
+    public void createProfile(Exchange exchange) {
+        userdao = new UserDaoImpl();
+        LinkedHashMap<String, Object> userData = (LinkedHashMap) exchange.getIn().getBody();
+        ResponseMessage msg = userdao.createProfile(userData);
+        exchange.getIn().setBody(msg);
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, "200");
+
+    }
+
     public void updateProfile(Exchange exchange) {
         userdao = new UserDaoImpl();
         LinkedHashMap<String, Object> userData = (LinkedHashMap) exchange.getIn().getBody();

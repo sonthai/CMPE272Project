@@ -11,5 +11,6 @@ public interface UserDao {
 
     public ResponseMessage register(LinkedHashMap<String, Object> userData);
     public ResponseMessage updateProfile(LinkedHashMap<String, Object> userData);
+    public ResponseMessage createProfile(LinkedHashMap<String, Object> userData);
     public ResponseMessage getProfile(LinkedHashMap<String, Object> userData);
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,60 @@ public class UserDaoImpl implements UserDao {
     @Override
     public ResponseMessage updateProfile(LinkedHashMap<String, Object> userData) {
         ResponseMessage response = null;
-        String isEdit = "false";
+
+        // Update user DB
+        QueryObject userQuery = new UserObject();
+        userQuery.setOperation("UPDATE");
+        userQuery.setTable("user");
+
+
+        Map<String, Object> userDB = new LinkedHashMap<>();
+        if (userData.get("phoneNo") != null) {
+            userDB.put("phoneNo", userData.get("phoneNo"));
+            userData.remove("phoneNo");
+        }
+        if (userData.get("password") != null) {
+            userDB.put("password", encryptWithMD5((String) userData.get("password")));
+            userData.remove("password");
+        }
+        if (userData.get("email") != null) {
+            userDB.put("email", userData.get("email"));
+            userData.remove("email");
+        }
+
+        if (userDB.size() > 0) {
+            String updateData = Utils.flattenKeyValuePair(userDB, ",");
+            List<String> data = new ArrayList<String>();
+            data.add(updateData);
+            userQuery.setValues(new ArrayList<String>(data));
+            String whereClause = "userName=" + userData.get("userName");
+            userQuery.setWhereClause(whereClause);
+            userQuery.executeQuery();
+        }
+
+        // Update user profile
+        if (userData.size() > 0) {
+            QueryObject profileQuery = new UserProfileObject();
+            profileQuery.setOperation("UPDATE");
+            profileQuery.setTable("user_profile");
+            String profileData = Utils.flattenKeyValuePair(userData, ",");
+            List<String> data = new ArrayList<String>();
+            data.add(profileData);
+            profileQuery.setValues(new ArrayList<String>(data));
+            String whereClause = "userName=" + userData.get("userName");
+            profileQuery.setWhereClause(whereClause);
+            userData.remove("userName");
+            profileQuery.executeQuery();
+        }
+
+
+        return Utils.constructMsg(0, Constants.SUCCESS_UPDATE_PROFILE, null);
+    }
+
+    @Override
+    public ResponseMessage createProfile(LinkedHashMap<String, Object> userData) {
+        ResponseMessage response = null;
+        /*String isEdit = "false";
         if (userData.get("isEdit") != null) {
             isEdit = (String) userData.get("isEdit");
             userData.remove("isEdit");
@@ -92,7 +146,7 @@ public class UserDaoImpl implements UserDao {
                 userDB.put("password", encryptWithMD5((String) userData.get("password")));
                 userData.remove("password");
             }
-        }
+        }*/
 
         // Update user profile table
         QueryObject queryObject = new QueryObject();
@@ -101,7 +155,7 @@ public class UserDaoImpl implements UserDao {
         List<String> insertValues = Utils.flattenMap(userData);
         queryObject.setValues(insertValues);
         queryObject.executeQuery();
-        response = Utils.constructMsg(0, Constants.SUCCESS_UPDATE_PROFILE, null);
+        response = Utils.constructMsg(0, Constants.SUCCESS_CREATE_PROFILE, null);
 
         return response;
     }
