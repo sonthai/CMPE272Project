@@ -91,17 +91,13 @@ public class UserDaoImpl implements UserDao {
             userDB.put("password", encryptWithMD5((String) userData.get("password")));
             userData.remove("password");
         }
-        if (userData.get("email") != null) {
-            userDB.put("email", userData.get("email"));
-            userData.remove("email");
-        }
 
         if (userDB.size() > 0) {
             String updateData = Utils.flattenKeyValuePair(userDB, ",");
             List<String> data = new ArrayList<String>();
             data.add(updateData);
             userQuery.setValues(new ArrayList<String>(data));
-            String whereClause = "userName=" + userData.get("userName");
+            String whereClause = "userName='" + userData.get("userName") + "'";
             userQuery.setWhereClause(whereClause);
             userQuery.executeQuery();
         }
@@ -111,13 +107,13 @@ public class UserDaoImpl implements UserDao {
             QueryObject profileQuery = new UserProfileObject();
             profileQuery.setOperation("UPDATE");
             profileQuery.setTable("user_profile");
+            String userName =  (String) userData.remove("userName");
             String profileData = Utils.flattenKeyValuePair(userData, ",");
             List<String> data = new ArrayList<String>();
             data.add(profileData);
             profileQuery.setValues(new ArrayList<String>(data));
-            String whereClause = "userName=" + userData.get("userName");
+            String whereClause = "userName='" + userName + "'";
             profileQuery.setWhereClause(whereClause);
-            userData.remove("userName");
             profileQuery.executeQuery();
         }
 

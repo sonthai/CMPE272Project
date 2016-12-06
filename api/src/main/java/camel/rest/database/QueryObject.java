@@ -83,9 +83,9 @@ public class QueryObject {
             sb.append(" SET ");
             sb.append(values.get(0));
             if (whereClause.length() > 0) {
-                sb.append("WHERE ").append(whereClause);
+                sb.append(" WHERE ").append(whereClause);
             }
-        } else if (operation.equalsIgnoreCase("delele")) {
+        } else if (operation.equalsIgnoreCase("delete")) {
 
         }
 
