@@ -2,6 +2,7 @@ package camel.rest.dao;
 
 import camel.rest.database.QueryObject;
 import camel.rest.database.UserObject;
+import camel.rest.database.UserProfileObject;
 import camel.rest.domain.ResponseMessage;
 import camel.rest.utils.Constants;
 import camel.rest.utils.Utils;
@@ -73,7 +74,27 @@ public class UserDaoImpl implements UserDao {
     @Override
     public ResponseMessage updateProfile(LinkedHashMap<String, Object> userData) {
         ResponseMessage response = null;
-        QueryObject queryObject = new UserObject();
+        String isEdit = "false";
+        if (userData.get("isEdit") != null) {
+            isEdit = (String) userData.get("isEdit");
+        }
+
+        // Update user table if its edited only for phone number and password
+        if (isEdit.equals("true")) {
+            QueryObject userQuery = new UserObject();
+            Map<String, Object> userDB = new LinkedHashMap<>();
+            if (userData.get("phoneNo") != null) {
+                userDB.put("phoneNo", userData.get("phoneNo"));
+                userData.remove("phoneNo");
+            }
+            if (userData.get("password") != null) {
+                userDB.put("password", encryptWithMD5((String) userData.get("password")));
+                userData.remove("password");
+            }
+        }
+
+        // Update user profile table
+        QueryObject queryObject = new QueryObject();
         queryObject.setOperation("INSERT");
         queryObject.setTable("user_profile");
         List<String> insertValues = Utils.flattenMap(userData);
@@ -86,19 +107,35 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public ResponseMessage getProfile(LinkedHashMap<String, Object> userData) {
-        boolean isNewUser =  (boolean) userData.get("isNewUser");
+        ResponseMessage response = null;
+        String isNewUser = "false";
+        if (userData.get("isNewUser") != null) {
+            isNewUser = (String) userData.get("isNewUser");
+        }
+        /*Map<String, Object> userDB = new LinkedHashMap<>();
+        if (isNewUser.equals("true")) {
+            userDB = userData;
+        } else {
+            userDB.put("firstName", userData.get("firstName"));
+            userDB.put("lastName", userData.get("lastName"));
+            userDB.put("userName", userData.get("userName"));
+            userDB.put("phoneNo", userData.get("phoneNo"));
+            userDB.put("password", userData.get("password"));
+        }*/
 
-        QueryObject queryObject = new UserObject();
-        queryObject.setOperation("SELECT");
-        queryObject.setQueryFields(new String[] {"*"});
-        queryObject.setTable("user");
+        QueryObject userObject = new UserObject();
+        userObject.setOperation("SELECT");
+        userObject.setQueryFields(new String[] {"*"});
+        userObject.setTable("user");
         String whereClause = Utils.flattenKeyValuePair(userData, "AND");
-        queryObject.setWhereClause(whereClause);
+        userObject.setWhereClause(whereClause);
 
-        queryObject.executeQuery();
+        userObject.executeQuery();
 
-        if (!isNewUser) {
-            queryObject = new UserObject();
+        List<Map<String, Object>> rows = userObject.getRecords();
+
+        if (isNewUser.equals("false")) {
+            QueryObject queryObject = new UserProfileObject();
             queryObject.setOperation("SELECT");
             queryObject.setQueryFields(new String[]{"*"});
             queryObject.setTable("user_profile");
@@ -106,9 +143,11 @@ public class UserDaoImpl implements UserDao {
             queryObject.setWhereClause(whereClause);
 
             queryObject.executeQuery();
+            rows.get(0).putAll(queryObject.getRecords().get(0));
         }
 
-        return null;
+        response = Utils.constructMsg(0, "", rows);
+        return response;
     }
 
     private String encryptWithMD5(String pass) {
