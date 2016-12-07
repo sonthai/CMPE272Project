@@ -119,7 +119,7 @@ public class UserDaoImpl implements UserDao {
                 String whereClause = "userName='" + userName + "'";
                 profileQuery.setWhereClause(whereClause);
                 profileQuery.executeQuery();
-            } else {
+            } else if (role == 1){
                 QueryObject profileQuery = new RecruiterProfile();
                 profileQuery.setOperation("UPDATE");
                 profileQuery.setTable("recruiter_profile");
