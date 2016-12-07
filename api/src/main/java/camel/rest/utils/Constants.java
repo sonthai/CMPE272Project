@@ -8,6 +8,10 @@ public class Constants {
     public static final String SUCCESS_REGISTER = "Register successfully";
     public static final String SUCCESS_CREATE_PROFILE = "Create profile successfully";
     public static final String SUCCESS_UPDATE_PROFILE = "Update profile successfully";
+
+    public static final String SUCCESS_JOB_LOAD_FROM_DB = "Load job successfully";
+    public static final String SUCCESS_JOB_TRACKING_FROM_RECRUITER = "Tracking job from recruiter";
+    public static final String SUCCESS_JOB_TRACKING_FROM_APPLICANT = "Tracking job from applicant";
     public static final String SUCCESS_JOB_CREATE = "Create job successfully";
     public static final String SUCCESS_JOB_APPLY = "Apply job successfully";
 

@@ -145,26 +145,6 @@ public class UserDaoImpl implements UserDao {
         // 0 is job seeker, 1 is job recruiter
         int role = (int) userData.remove("role");
 
-        /*String isEdit = "false";
-        if (userData.get("isEdit") != null) {
-            isEdit = (String) userData.get("isEdit");
-            userData.remove("isEdit");
-        }
-
-        // Update user table if its edited only for phone number and password
-        if (isEdit.equals("true")) {
-            QueryObject userQuery = new UserObject();
-            Map<String, Object> userDB = new LinkedHashMap<>();
-            if (userData.get("phoneNo") != null) {
-                userDB.put("phoneNo", userData.get("phoneNo"));
-                userData.remove("phoneNo");
-            }
-            if (userData.get("password") != null) {
-                userDB.put("password", encryptWithMD5((String) userData.get("password")));
-                userData.remove("password");
-            }
-        }*/
-
         // Update user/recruiter profile table
         QueryObject queryObject = new QueryObject();
         queryObject.setOperation("INSERT");
@@ -187,22 +167,6 @@ public class UserDaoImpl implements UserDao {
         ResponseMessage response = null;
         // 0 is job seeker, 1 is job recruiter
         int role = (int) userData.remove("role");
-
-        //String isNewUser = "false";
-        //if (userData.get("isNewUser") != null) {
-          //  isNewUser = (String) userData.get("isNewUser");
-            //userData.remove("isNewUser");
-        //}
-        /*Map<String, Object> userDB = new LinkedHashMap<>();
-        if (isNewUser.equals("true")) {
-            userDB = userData;
-        } else {
-            userDB.put("firstName", userData.get("firstName"));
-            userDB.put("lastName", userData.get("lastName"));
-            userDB.put("userName", userData.get("userName"));
-            userDB.put("phoneNo", userData.get("phoneNo"));
-            userDB.put("password", userData.get("password"));
-        }*/
 
         QueryObject userObject = new UserObject();
         userObject.setOperation("SELECT");

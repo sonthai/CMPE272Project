@@ -6,11 +6,15 @@ import camel.rest.database.QueryObject;
 import camel.rest.domain.ResponseMessage;
 import camel.rest.utils.Constants;
 import camel.rest.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 
 public class JobDaoImpl implements JobDao {
+    Logger LOG = LoggerFactory.getLogger(JobDaoImpl.class);
+
     @Override
     public ResponseMessage findJobs(LinkedHashMap<String, Object> jobQuery) {
         // Get Job from Dice API
@@ -25,7 +29,7 @@ public class JobDaoImpl implements JobDao {
         if (jobFromDB.size() > 0) {
             response.addAll(jobFromDB);
         }
-        return Utils.constructMsg(0, "Job List", response);
+        return Utils.constructMsg(0, Constants.SUCCESS_JOB_LOAD_FROM_DB, response);
     }
 
     @Override
@@ -35,17 +39,36 @@ public class JobDaoImpl implements JobDao {
         jobQuery.setOperation("SELECT");
         jobQuery.setTable("job_applied");
         jobQuery.setQueryFields(new String[] {"*"});
-        String whereClause = "userName='" + userData.get("userName") + "'";
+        String whereClause = "";
+        String msgRtn = "";
+        if (userData.get("companyInfo") != null) {
+            whereClause = "companyInfo='" + userData.get("companyInfo") + "'";
+            msgRtn = Constants.SUCCESS_JOB_TRACKING_FROM_RECRUITER;
+        } else if (userData.get("userName") != null) {
+            msgRtn = Constants.SUCCESS_JOB_TRACKING_FROM_APPLICANT;
+            whereClause = "userName='" + userData.get("userName") + "'";
+        }
+
         jobQuery.setWhereClause(whereClause);
         jobQuery.executeQuery();
-        response = Utils.constructMsg(0, "", jobQuery.getRecords());
+        response = Utils.constructMsg(0, msgRtn, jobQuery.getRecords());
 
         return  response;
     }
 
     @Override
     public ResponseMessage applyJob(LinkedHashMap<String, Object> jobData) {
-        return null;
+        ResponseMessage response = null;
+        QueryObject queryObject = new JobObject();
+        queryObject.setOperation("INSERT");
+        queryObject.setTable("job_applied");
+        jobData.put("date", null);
+        List<String> insertValues = Utils.flattenMap(jobData);
+        queryObject.setValues(insertValues);
+        queryObject.executeQuery();
+        response = Utils.constructMsg(0, Constants.SUCCESS_JOB_APPLY, null);
+
+        return  response;
     }
 
     @Override
