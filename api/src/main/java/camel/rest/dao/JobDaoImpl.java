@@ -39,17 +39,17 @@ public class JobDaoImpl implements JobDao {
         jobQuery.setOperation("SELECT");
         jobQuery.setTable("job_applied");
         jobQuery.setQueryFields(new String[] {"*"});
-        String whereClause = "";
+        StringBuilder whereClause = new StringBuilder();
         String msgRtn = "";
-        if (userData.get("companyInfo") != null) {
-            whereClause = "companyInfo='" + userData.get("companyInfo") + "'";
+        if (userData.get("companyID") != null) {
+            whereClause.append("companyID='").append(userData.get("companyID")).append("'");
             msgRtn = Constants.SUCCESS_JOB_TRACKING_FROM_RECRUITER;
         } else if (userData.get("userName") != null) {
+            whereClause.append("userName='").append(userData.get("userName")).append("'");
             msgRtn = Constants.SUCCESS_JOB_TRACKING_FROM_APPLICANT;
-            whereClause = "userName='" + userData.get("userName") + "'";
         }
 
-        jobQuery.setWhereClause(whereClause);
+        jobQuery.setWhereClause(whereClause.toString());
         jobQuery.executeQuery();
         response = Utils.constructMsg(0, msgRtn, jobQuery.getRecords());
 
