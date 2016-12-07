@@ -229,7 +229,7 @@ public class UserDaoImpl implements UserDao {
             QueryObject queryObject = new RecruiterProfile();
             queryObject.setOperation("SELECT");
             queryObject.setQueryFields(new String[]{"*"});
-            queryObject.setTable("user_profile");
+            queryObject.setTable("recruiter_profile");
             whereClause = Utils.flattenKeyValuePair(userData, "AND");
             queryObject.setWhereClause(whereClause);
 
