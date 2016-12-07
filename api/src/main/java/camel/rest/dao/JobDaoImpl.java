@@ -93,7 +93,7 @@ public class JobDaoImpl implements JobDao {
         String skills = (String) jobQuery.remove("skills");
         String [] skillsArr = null;
         if (skills != null) {
-            skillsArr = skills.toLowerCase().split(",");
+            skillsArr = skills.replaceAll("\\s","").toLowerCase().split(",");
 
         }
 
@@ -108,14 +108,13 @@ public class JobDaoImpl implements JobDao {
 
         if (skillsArr != null && skillsArr.length > 0) {
             List<Map<String, Object>> filter = new ArrayList<>();
-            Set<Integer> jobIds = new HashSet<>();
             for(Map<String, Object> map : rows) {
                 String skillStr = (String) map.get("skills");
-                List<String> skillLst = new ArrayList(Arrays.asList(skillStr.toLowerCase().split(",")));
+                Set<String> skillLst = new HashSet<>(Arrays.asList(skillStr.replaceAll("\\s","").split(",")));
                 for (String s: skillsArr) {
-                    if (skillLst.contains(s) && !jobIds.contains((int)map.get("id"))) {
+                    if (skillLst.contains(s)) {
                         filter.add(map);
-                        jobIds.add((int) map.get("id"));
+                        break;
                     }
                 }
             }
