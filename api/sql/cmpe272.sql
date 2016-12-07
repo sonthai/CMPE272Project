@@ -81,6 +81,31 @@ LOCK TABLES `job_applied` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `recruiter_profile`
+--
+
+DROP TABLE IF EXISTS `recruiter_profile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recruiter_profile` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `companyInfo` blob NOT NULL,
+  `note` blob NOT NULL,
+  `email` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`,`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recruiter_profile`
+--
+
+LOCK TABLES `recruiter_profile` WRITE;
+/*!40000 ALTER TABLE `recruiter_profile` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recruiter_profile` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -146,4 +171,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-06 16:55:08
+-- Dump completed on 2016-12-06 18:54:36
