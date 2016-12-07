@@ -74,7 +74,10 @@ public class QueryObject {
                 sb.append(StringUtils.join(queryFields, ",")).append(" ");
             }
             sb.append(" FROM ").append(table).append(" ");
-            sb.append("WHERE ").append(whereClause);
+            if (whereClause != null && whereClause.length() > 0) {
+                sb.append(" WHERE ").append(whereClause);
+            }
+
         } else if (operation.equalsIgnoreCase("insert")) {
             sb.append("INTO ").append(table).append(" ");
             sb.append(values.get(0) + " VALUES " + values.get(1));
@@ -82,7 +85,7 @@ public class QueryObject {
             sb.append(table);
             sb.append(" SET ");
             sb.append(values.get(0));
-            if (whereClause.length() > 0) {
+            if (whereClause != null && whereClause.length() > 0) {
                 sb.append(" WHERE ").append(whereClause);
             }
         } else if (operation.equalsIgnoreCase("delete")) {

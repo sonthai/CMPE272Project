@@ -27,7 +27,7 @@ CREATE TABLE `job` (
   `joborder_id` int(11) NOT NULL AUTO_INCREMENT,
   `jobTitle` varchar(100) NOT NULL,
   `date` date NOT NULL,
-  `skill` varchar(100) NOT NULL,
+  `skills` varchar(100) NOT NULL,
   `areacode` varchar(10) NOT NULL,
   `state` varchar(10) NOT NULL,
   `city` varchar(15) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE `job` (
   `isActive` tinyint(1) DEFAULT NULL,
   `isDeleted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`joborder_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +48,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES ('http://google.com',1,'Software Engineer','2016-12-06','java','98987','CA','San Francisco','ABC','abc@gmail.com',4,'great skill','Non label',1,0),('http://google.com',2,'Software Engineer II','2016-12-06','c++, java, perl','98987','CA','San Francisco','CDF','abc@yahoo.com',4,'great skill','Non label 1',1,0);
+INSERT INTO `job` VALUES ('http://google.com',1,'Software Engineer','2016-12-06','java','98987','CA','San Francisco','ABC','abc@gmail.com',4,'great skill','Non label',1,0),('http://google.com',2,'Software Engineer II','2016-12-06','c++, java, perl','98987','CA','San Francisco','CDF','abc@yahoo.com',4,'great skill','Non label 1',1,0),('http://google.com',3,'Software Engineer II','2016-12-06','c++, java, perl','98987','CA','San Francisco','CDF','abc@yahoo.com',4,'great skill','Non label 1',1,0),('http://google.com',4,'Software Engineer III','2016-12-06','c++, java, perl','98987','CA','San Francisco','CDF','abc@yahoo.com',4,'great skill','Non label 1',1,0);
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +68,7 @@ CREATE TABLE `job_applied` (
   `location` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `detailUrl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`,`companyID`,`userName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,6 +77,7 @@ CREATE TABLE `job_applied` (
 
 LOCK TABLES `job_applied` WRITE;
 /*!40000 ALTER TABLE `job_applied` DISABLE KEYS */;
+INSERT INTO `job_applied` VALUES (1,'Google','sdthai','Software Engineer','2016-12-06','Mountin View','http://google.com'),(2,'Netapp','sdthai','Software Engineer','2016-12-06','Mountin View','http://netapp.com');
 /*!40000 ALTER TABLE `job_applied` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,4 +172,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-06 18:54:36
+-- Dump completed on 2016-12-06 19:51:58

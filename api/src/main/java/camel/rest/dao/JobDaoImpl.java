@@ -1,15 +1,13 @@
 package camel.rest.dao;
 
+import camel.rest.database.JobHistory;
 import camel.rest.database.JobObject;
 import camel.rest.database.QueryObject;
 import camel.rest.domain.ResponseMessage;
 import camel.rest.utils.Constants;
 import camel.rest.utils.Utils;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class JobDaoImpl implements JobDao {
@@ -33,7 +31,7 @@ public class JobDaoImpl implements JobDao {
     @Override
     public ResponseMessage applyHistory(LinkedHashMap<String, Object> userData) {
         ResponseMessage response = null;
-        QueryObject jobQuery = new QueryObject();
+        QueryObject jobQuery = new JobHistory();
         jobQuery.setOperation("SELECT");
         jobQuery.setTable("job_applied");
         jobQuery.setQueryFields(new String[] {"*"});
@@ -90,12 +88,36 @@ public class JobDaoImpl implements JobDao {
         queryObject.setOperation("SELECT");
         queryObject.setQueryFields(new String[] {"*"});
         queryObject.setTable("job");
-        String whereClause = Utils.flattenKeyValuePair(jobQuery, "AND");
-        queryObject.setWhereClause(whereClause);
+
+        String skills = (String) jobQuery.remove("skills");
+        String [] skillsArr = null;
+        if (skills != null) {
+            skillsArr = skills.toLowerCase().split(",");
+
+        }
+
+        if (jobQuery.size() > 0) {
+            String whereClause = Utils.flattenKeyValuePair(jobQuery, "AND");
+            queryObject.setWhereClause(whereClause);
+        }
 
         queryObject.executeQuery();
 
         List<Map<String, Object>> rows = queryObject.getRecords();
+
+        if (skillsArr != null && skillsArr.length > 0) {
+            List<Map<String, Object>> filter = new ArrayList<>();
+            for(Map<String, Object> map : rows) {
+                String skillStr = (String) map.get("skills");
+                List<String> skillLst = new ArrayList(Arrays.asList(skillStr.toLowerCase().split(",")));
+                for (String s: skillsArr) {
+                    if (skillLst.contains(s)) {
+                        filter.add(map);
+                    }
+                }
+            }
+            rows = filter;
+        }
 
         return rows;
     }
