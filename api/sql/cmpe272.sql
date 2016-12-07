@@ -92,8 +92,9 @@ CREATE TABLE `recruiter_profile` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `companyInfo` blob NOT NULL,
   `note` blob NOT NULL,
-  `email` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`,`email`)
+  `email` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
+  `userName` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`,`userName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -172,4 +173,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-06 19:51:58
+-- Dump completed on 2016-12-06 21:43:40
