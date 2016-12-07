@@ -113,7 +113,7 @@ public class JobDaoImpl implements JobDao {
                 String skillStr = (String) map.get("skills");
                 List<String> skillLst = new ArrayList(Arrays.asList(skillStr.toLowerCase().split(",")));
                 for (String s: skillsArr) {
-                    if (skillLst.contains(s) && !jobIds.contains(map.get("id"))) {
+                    if (skillLst.contains(s) && !jobIds.contains((int)map.get("id"))) {
                         filter.add(map);
                         jobIds.add((int) map.get("id"));
                     }
