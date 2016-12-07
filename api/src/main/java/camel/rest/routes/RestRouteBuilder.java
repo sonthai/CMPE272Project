@@ -11,6 +11,7 @@ public class RestRouteBuilder extends RouteBuilder {
         restConfiguration().component("restlet")
                 .host("localhost")
                 .port(8181)
+                .enableCORS(true)
                 .bindingMode(RestBindingMode.json);
 
         rest("/api")
