@@ -89,6 +89,7 @@ public class JobDaoImpl implements JobDao {
         queryObject.setQueryFields(new String[] {"*"});
         queryObject.setTable("job");
 
+
         String skills = (String) jobQuery.remove("skills");
         String [] skillsArr = null;
         if (skills != null) {
@@ -107,12 +108,14 @@ public class JobDaoImpl implements JobDao {
 
         if (skillsArr != null && skillsArr.length > 0) {
             List<Map<String, Object>> filter = new ArrayList<>();
+            Set<Integer> jobIds = new HashSet<>();
             for(Map<String, Object> map : rows) {
                 String skillStr = (String) map.get("skills");
                 List<String> skillLst = new ArrayList(Arrays.asList(skillStr.toLowerCase().split(",")));
                 for (String s: skillsArr) {
-                    if (skillLst.contains(s)) {
+                    if (skillLst.contains(s) && !jobIds.contains(map.get("id"))) {
                         filter.add(map);
+                        jobIds.add((int) map.get("id"));
                     }
                 }
             }

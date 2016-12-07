@@ -14,6 +14,7 @@ public class JobObject extends QueryObject {
         try {
             while (rs.next()) {
                 map = new HashMap<>();
+                map.put("id", rs.getInt("id"));
                 map.put("jobTitle", rs.getString("jobTitle"));
                 map.put("company", rs.getString("companyID"));
                 map.put("date", rs.getDate("date"));
