@@ -1,6 +1,7 @@
 package camel.rest.dao;
 
 import camel.rest.database.QueryObject;
+import camel.rest.database.RecruiterProfile;
 import camel.rest.database.UserObject;
 import camel.rest.database.UserProfileObject;
 import camel.rest.domain.ResponseMessage;
@@ -75,6 +76,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public ResponseMessage updateProfile(LinkedHashMap<String, Object> userData) {
         ResponseMessage response = null;
+        // 0 is job seeker, 1 is job recruiter
+        int role = (int) userData.remove("role");
 
         // Update user DB
         QueryObject userQuery = new UserObject();
@@ -104,17 +107,32 @@ public class UserDaoImpl implements UserDao {
 
         // Update user profile
         if (userData.size() > 0) {
-            QueryObject profileQuery = new UserProfileObject();
-            profileQuery.setOperation("UPDATE");
-            profileQuery.setTable("user_profile");
-            String userName =  (String) userData.remove("userName");
-            String profileData = Utils.flattenKeyValuePair(userData, ",");
-            List<String> data = new ArrayList<String>();
-            data.add(profileData);
-            profileQuery.setValues(new ArrayList<String>(data));
-            String whereClause = "userName='" + userName + "'";
-            profileQuery.setWhereClause(whereClause);
-            profileQuery.executeQuery();
+            if (role == 0) {
+                QueryObject profileQuery = new UserProfileObject();
+                profileQuery.setOperation("UPDATE");
+                profileQuery.setTable("user_profile");
+                String userName = (String) userData.remove("userName");
+                String profileData = Utils.flattenKeyValuePair(userData, ",");
+                List<String> data = new ArrayList<String>();
+                data.add(profileData);
+                profileQuery.setValues(new ArrayList<String>(data));
+                String whereClause = "userName='" + userName + "'";
+                profileQuery.setWhereClause(whereClause);
+                profileQuery.executeQuery();
+            } else {
+                QueryObject profileQuery = new RecruiterProfile();
+                profileQuery.setOperation("UPDATE");
+                profileQuery.setTable("recruiter_profile");
+                String userName = (String) userData.remove("userName");
+                String profileData = Utils.flattenKeyValuePair(userData, ",");
+                List<String> data = new ArrayList<String>();
+                data.add(profileData);
+                profileQuery.setValues(new ArrayList<String>(data));
+                String whereClause = "userName='" + userName + "'";
+                profileQuery.setWhereClause(whereClause);
+                profileQuery.executeQuery();
+
+            }
         }
 
 
@@ -124,6 +142,9 @@ public class UserDaoImpl implements UserDao {
     @Override
     public ResponseMessage createProfile(LinkedHashMap<String, Object> userData) {
         ResponseMessage response = null;
+        // 0 is job seeker, 1 is job recruiter
+        int role = (int) userData.remove("role");
+
         /*String isEdit = "false";
         if (userData.get("isEdit") != null) {
             isEdit = (String) userData.get("isEdit");
@@ -144,12 +165,17 @@ public class UserDaoImpl implements UserDao {
             }
         }*/
 
-        // Update user profile table
+        // Update user/recruiter profile table
         QueryObject queryObject = new QueryObject();
         queryObject.setOperation("INSERT");
-        queryObject.setTable("user_profile");
+
         List<String> insertValues = Utils.flattenMap(userData);
         queryObject.setValues(insertValues);
+        if (role == 0) {
+            queryObject.setTable("user_profile");
+        } else {
+            queryObject.setTable("recruiter_profile");
+        }
         queryObject.executeQuery();
         response = Utils.constructMsg(0, Constants.SUCCESS_CREATE_PROFILE, null);
 
@@ -159,6 +185,9 @@ public class UserDaoImpl implements UserDao {
     @Override
     public ResponseMessage getProfile(LinkedHashMap<String, Object> userData) {
         ResponseMessage response = null;
+        // 0 is job seeker, 1 is job recruiter
+        int role = (int) userData.remove("role");
+
         //String isNewUser = "false";
         //if (userData.get("isNewUser") != null) {
           //  isNewUser = (String) userData.get("isNewUser");
@@ -185,16 +214,29 @@ public class UserDaoImpl implements UserDao {
         userObject.executeQuery();
 
         List<Map<String, Object>> rows = userObject.getRecords();
+        List<Map<String, Object>> profileRow = null;
+        if (role == 0) {
+            QueryObject queryObject = new UserProfileObject();
+            queryObject.setOperation("SELECT");
+            queryObject.setQueryFields(new String[]{"*"});
+            queryObject.setTable("user_profile");
+            whereClause = Utils.flattenKeyValuePair(userData, "AND");
+            queryObject.setWhereClause(whereClause);
 
-        QueryObject queryObject = new UserProfileObject();
-        queryObject.setOperation("SELECT");
-        queryObject.setQueryFields(new String[]{"*"});
-        queryObject.setTable("user_profile");
-        whereClause = Utils.flattenKeyValuePair(userData, "AND");
-        queryObject.setWhereClause(whereClause);
+            queryObject.executeQuery();
+            profileRow = queryObject.getRecords();
+        } else if (role == 1) {
+            QueryObject queryObject = new RecruiterProfile();
+            queryObject.setOperation("SELECT");
+            queryObject.setQueryFields(new String[]{"*"});
+            queryObject.setTable("user_profile");
+            whereClause = Utils.flattenKeyValuePair(userData, "AND");
+            queryObject.setWhereClause(whereClause);
 
-        queryObject.executeQuery();
-        List<Map<String, Object>> profileRow = queryObject.getRecords();
+            queryObject.executeQuery();
+            profileRow = queryObject.getRecords();
+        }
+
         if (profileRow.size() > 0) {
             rows.get(0).putAll(profileRow.get(0));
             rows.get(0).put("isNewUser", 0);
