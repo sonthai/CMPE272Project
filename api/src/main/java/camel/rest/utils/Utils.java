@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -61,10 +62,12 @@ public class Utils {
                 values.append(",");
             }
             keys.append(pair.getKey());
-            if (pair.getValue() instanceof String) {
-                values.append("'").append(pair.getValue()).append("'");
-            } else if (pair.getValue() instanceof Integer || pair.getValue() instanceof Double) {
+            if (pair.getValue() instanceof Integer || pair.getValue() instanceof Double) {
                 values.append(pair.getValue());
+            } else if (pair.getValue() instanceof String) {
+                values.append("'").append(pair.getValue()).append("'");
+            } else if (pair.getKey().equals("date") && pair.getValue() == null) {
+                values.append("CURDATE()");
             }
         }
 

@@ -20,8 +20,8 @@ public class RestRouteBuilder extends RouteBuilder {
                 .post("/user/update-profile").consumes("application/json").to("direct:update_user_profile")
                 .post("/user/profile").consumes("application/json").to("direct:get_user_profile")
                 .post("/job/list").produces("application/json").to("direct:job_list")
+                .post("/job/tracking").produces("application/json").to("direct:job_tracking")
                 .post("/job/apply").produces("application/json").to("direct:job_apply")
-                .post("/job/history").produces("application/json").to("direct:job_history")
                 .post("/job/create").produces("application/json").to("direct:job_create");
 
         from("direct:user_login").bean(UserServices.class, "login").end();
@@ -29,10 +29,10 @@ public class RestRouteBuilder extends RouteBuilder {
         from("direct:create_user_profile").bean(UserServices.class, "createProfile");
         from("direct:update_user_profile").bean(UserServices.class, "updateProfile");
         from("direct:get_user_profile").bean(UserServices.class, "getUserProfile");
-        //from("direct:job_list").bean(JobServices.class, "findJobs").end();
+        from("direct:job_list").bean(JobServices.class, "findJobs").end();
+        from("direct:job_tracking").bean(JobServices.class, "jobTracking").end();
         //from("direct:job_apply").bean(JobServices.class, "applyJob").end();
-        //from("direct:job_history").bean(JobServices.class, "applyHistory").end();
-        //from("direct:job_create").bean(JobServices.class, "createJob").end();
+        from("direct:job_create").bean(JobServices.class, "createJob").end();
 
     }
 }

@@ -30,11 +30,11 @@ public class JobServices {
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, "200");
     }
 
-    public void applyHistory(Exchange exchange) {
+    public void jobTracking(Exchange exchange) {
         jobDao = new JobDaoImpl();
-        LinkedHashMap<String, Object> userData = (LinkedHashMap) exchange.getIn().getBody();
+        LinkedHashMap<String, Object> jobData = (LinkedHashMap) exchange.getIn().getBody();
 
-        ResponseMessage msg = jobDao.applyHistory(userData);
+        ResponseMessage msg = jobDao.applyHistory(jobData);
         exchange.getIn().setBody(msg);
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, "200");

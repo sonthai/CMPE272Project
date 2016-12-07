@@ -6,6 +6,7 @@ import camel.rest.domain.ResponseMessage;
 import camel.rest.utils.Constants;
 import camel.rest.utils.Utils;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,17 @@ public class JobDaoImpl implements JobDao {
 
     @Override
     public ResponseMessage applyHistory(LinkedHashMap<String, Object> userData) {
-        return null;
+        ResponseMessage response = null;
+        QueryObject jobQuery = new QueryObject();
+        jobQuery.setOperation("SELECT");
+        jobQuery.setTable("job_applied");
+        jobQuery.setQueryFields(new String[] {"*"});
+        String whereClause = "userName='" + userData.get("userName") + "'";
+        jobQuery.setWhereClause(whereClause);
+        jobQuery.executeQuery();
+        response = Utils.constructMsg(0, "", jobQuery.getRecords());
+
+        return  response;
     }
 
     @Override
@@ -45,6 +56,7 @@ public class JobDaoImpl implements JobDao {
         QueryObject queryObject = new JobObject();
         queryObject.setOperation("INSERT");
         queryObject.setTable("job");
+        jobData.put("date", null);
         List<String> insertValues = Utils.flattenMap(jobData);
         queryObject.setValues(insertValues);
         queryObject.executeQuery();

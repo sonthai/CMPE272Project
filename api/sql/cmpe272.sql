@@ -24,17 +24,22 @@ DROP TABLE IF EXISTS `job`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `job` (
   `detailUrl` varchar(150) NOT NULL,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `jobTitle` varchar(30) NOT NULL,
-  `company` varchar(30) NOT NULL,
+  `joborder_id` int(11) NOT NULL AUTO_INCREMENT,
+  `jobTitle` varchar(100) NOT NULL,
   `date` date NOT NULL,
   `skill` varchar(100) NOT NULL,
   `areacode` varchar(10) NOT NULL,
   `state` varchar(10) NOT NULL,
   `city` varchar(15) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `recname` varchar(40) NOT NULL,
+  `recemail` varchar(50) NOT NULL,
+  `openningCnt` int(5) NOT NULL,
+  `detail` blob NOT NULL,
+  `companyID` varchar(30) NOT NULL,
+  `isActive` tinyint(1) DEFAULT NULL,
+  `isDeleted` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`joborder_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +48,36 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
+INSERT INTO `job` VALUES ('http://google.com',1,'Software Engineer','2016-12-06','java','98987','CA','San Francisco','ABC','abc@gmail.com',4,'great skill','Non label',1,0),('http://google.com',2,'Software Engineer II','2016-12-06','c++, java, perl','98987','CA','San Francisco','CDF','abc@yahoo.com',4,'great skill','Non label 1',1,0);
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `job_applied`
+--
+
+DROP TABLE IF EXISTS `job_applied`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `job_applied` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `companyID` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `userName` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `jobTitle` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `location` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `detailUrl` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`,`companyID`,`userName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `job_applied`
+--
+
+LOCK TABLES `job_applied` WRITE;
+/*!40000 ALTER TABLE `job_applied` DISABLE KEYS */;
+/*!40000 ALTER TABLE `job_applied` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -86,8 +120,9 @@ CREATE TABLE `user_profile` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `skills` blob,
   `work_experience` blob,
-  `education` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `education` blob,
   `userName` varchar(20) NOT NULL,
+  `email` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`,`userName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -98,7 +133,7 @@ CREATE TABLE `user_profile` (
 
 LOCK TABLES `user_profile` WRITE;
 /*!40000 ALTER TABLE `user_profile` DISABLE KEYS */;
-INSERT INTO `user_profile` VALUES (3,'java, c++','10 years of software development','Calpoly SLO','sdthai'),(4,'java, c++, perl','5 years of software development','Calpoly SLO','david');
+INSERT INTO `user_profile` VALUES (3,'java, c++','10 years of software development','Calpoly SLO','sdthai',NULL),(4,'java, c++, perl','5 years of software development','Calpoly SLO','david',NULL);
 /*!40000 ALTER TABLE `user_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -111,4 +146,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-06 10:14:33
+-- Dump completed on 2016-12-06 16:55:08
