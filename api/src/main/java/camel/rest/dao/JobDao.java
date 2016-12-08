@@ -10,6 +10,6 @@ public interface JobDao {
     public ResponseMessage applyHistory(LinkedHashMap<String, Object> userData);
     public ResponseMessage applyJob(LinkedHashMap<String, Object> jobData);
     public ResponseMessage createJob(LinkedHashMap<String, Object> jobData);
-
+    public ResponseMessage getCompanyList();
 
 }

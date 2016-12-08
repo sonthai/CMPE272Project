@@ -23,7 +23,8 @@ public class RestRouteBuilder extends RouteBuilder {
                 .post("/job/list").produces("application/json").to("direct:job_list")
                 .post("/job/tracking").produces("application/json").to("direct:job_tracking")
                 .post("/job/apply").produces("application/json").to("direct:job_apply")
-                .post("/job/create").produces("application/json").to("direct:job_create");
+                .post("/job/create").produces("application/json").to("direct:job_create")
+                .get("/job/company-list").produces("application/json").to("direct:company-list");
 
         from("direct:user_login").bean(UserServices.class, "login").end();
         from("direct:user_register").bean(UserServices.class, "register").end();
@@ -34,6 +35,7 @@ public class RestRouteBuilder extends RouteBuilder {
         from("direct:job_tracking").bean(JobServices.class, "jobTracking").end();
         from("direct:job_apply").bean(JobServices.class, "applyJob").end();
         from("direct:job_create").bean(JobServices.class, "createJob").end();
+        from("direct:company-list").bean(JobServices.class, "getCompanyList").end();
 
     }
 }

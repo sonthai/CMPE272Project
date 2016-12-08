@@ -1,5 +1,6 @@
 package camel.rest.dao;
 
+import camel.rest.database.CompanyObject;
 import camel.rest.database.JobHistory;
 import camel.rest.database.JobObject;
 import camel.rest.database.QueryObject;
@@ -84,6 +85,27 @@ public class JobDaoImpl implements JobDao {
         response = Utils.constructMsg(0, Constants.SUCCESS_JOB_CREATE, null);
 
         return  response;
+    }
+
+    @Override
+    public ResponseMessage getCompanyList() {
+        QueryObject jobQuery = new CompanyObject();
+        jobQuery.setOperation("SELECT");
+        jobQuery.setTable("job_applied");
+        jobQuery.setQueryFields(new String[] {"distinct(companyID)"});
+        jobQuery.executeQuery();
+
+        List<String> companyList = new ArrayList<>();
+
+        for (Map<String, Object> map: jobQuery.getRecords()) {
+            companyList.add((String) map.get("company"));
+        }
+
+        ResponseMessage response = new ResponseMessage();
+        response.setErrorCode(0);
+        response.setDataArrayList(companyList);
+        response.setMessage("Success Load company list");
+        return response;
     }
 
     private List<Map<String, Object>> loadJobsFromDice(String query) {

@@ -49,4 +49,13 @@ public class JobServices {
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, "200");
     }
+
+    public void getCompanyList(Exchange exchange) {
+        jobDao = new JobDaoImpl();
+
+        ResponseMessage msg = jobDao.getCompanyList();
+        exchange.getIn().setBody(msg);
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json");
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, "200");
+    }
 }

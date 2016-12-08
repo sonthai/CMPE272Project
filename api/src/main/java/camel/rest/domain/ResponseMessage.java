@@ -8,6 +8,7 @@ public class ResponseMessage {
     private String message;
     private int errorCode;
     private List<Map<String, Object>> dataResponse;
+    private List<String> dataArrayList;
 
     public String getMessage() {
         return message;
@@ -31,5 +32,13 @@ public class ResponseMessage {
 
     public void setDataResponse(List<Map<String, Object>> dataResponse) {
         this.dataResponse = dataResponse;
+    }
+
+    public List<String> getDataArrayList() {
+        return dataArrayList;
+    }
+
+    public void setDataArrayList(List<String> dataArrayList) {
+        this.dataArrayList = dataArrayList;
     }
 }
